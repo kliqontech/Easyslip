@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/Easyslip/static/css/main.bcf4aefa.css",
+    "main.js": "/Easyslip/static/js/main.95984649.js",
+    "static/js/977.62362898.chunk.js": "/Easyslip/static/js/977.62362898.chunk.js",
+    "static/js/455.16cbf2dc.chunk.js": "/Easyslip/static/js/455.16cbf2dc.chunk.js",
+    "static/js/453.f072ffa8.chunk.js": "/Easyslip/static/js/453.f072ffa8.chunk.js",
+    "static/media/logo.jpg": "/Easyslip/static/media/logo.240248706ff8cc30fd89.jpg",
+    "index.html": "/Easyslip/index.html",
+    "main.bcf4aefa.css.map": "/Easyslip/static/css/main.bcf4aefa.css.map",
+    "main.95984649.js.map": "/Easyslip/static/js/main.95984649.js.map",
+    "977.62362898.chunk.js.map": "/Easyslip/static/js/977.62362898.chunk.js.map",
+    "455.16cbf2dc.chunk.js.map": "/Easyslip/static/js/455.16cbf2dc.chunk.js.map",
+    "453.f072ffa8.chunk.js.map": "/Easyslip/static/js/453.f072ffa8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bcf4aefa.css",
+    "static/js/main.95984649.js"
+  ]
+}
