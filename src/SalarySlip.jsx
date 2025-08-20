@@ -44,33 +44,41 @@ const SalarySlip = () => {
 
   const componentRef = useRef();
 
-  // Enhanced PDF generation function with better page filling
+  // Optimized PDF generation function with reduced file size
   const handleDownloadPDF = () => {
     const element = componentRef.current;
     
     // Apply styles that will make the content better for PDF generation
     element.classList.add('for-pdf-export');
     
-    // Set optimal configuration for crisp PDF output
+    // Optimized configuration for smaller file size while maintaining quality
     html2canvas(element, {
-      scale: 2, // Balance between quality and performance
+      scale: 1.5, // Reduced from 2 to 1.5 for smaller file size
       useCORS: true,
       logging: false,
       letterRendering: true,
       backgroundColor: '#ffffff',
-      windowWidth: 1000, // Simulate a wider screen for better layout
-      windowHeight: element.scrollHeight
+      windowWidth: 800, // Reduced window width
+      windowHeight: element.scrollHeight,
+      // Optimize image quality vs size
+      allowTaint: false,
+      removeContainer: true,
+      imageTimeout: 0,
+      // Reduce image quality slightly for smaller files
+      quality: 0.85
     }).then(canvas => {
       // Remove temporary class after capture
       element.classList.remove('for-pdf-export');
       
-      const imgData = canvas.toDataURL('image/png');
+      // Convert to JPEG with compression for smaller file size
+      const imgData = canvas.toDataURL('image/jpeg', 0.85); // JPEG with 85% quality
       
       // Create PDF with A4 dimensions
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
-        format: 'a4'
+        format: 'a4',
+        compress: true // Enable PDF compression
       });
       
       // Calculate dimensions to maximize content on page
@@ -78,28 +86,35 @@ const SalarySlip = () => {
       const pageHeight = pdf.internal.pageSize.getHeight();
       
       // Calculate width and height with improved ratio
-      // Use 98% of the page width for maximum use of space
-      const imgWidth = pageWidth * 0.98; 
+      const imgWidth = pageWidth * 0.95; // Slightly reduced padding
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
       // Add the image with minimal margins
-      const xPosition = (pageWidth - imgWidth) / 2; // Center horizontally
-      const yPosition = 2; // Position near top
+      const xPosition = (pageWidth - imgWidth) / 2;
+      const yPosition = 3; // Small top margin
       
       // Check if content exceeds page height
-      if (imgHeight > pageHeight - 4) {
+      if (imgHeight > pageHeight - 6) {
         // Content is too tall, scale it to fit the page height with small margins
-        const newImgHeight = pageHeight - 4;
+        const newImgHeight = pageHeight - 6;
         const newImgWidth = (canvas.width * newImgHeight) / canvas.height;
         
         const newXPosition = (pageWidth - newImgWidth) / 2;
-        pdf.addImage(imgData, 'PNG', newXPosition, yPosition, newImgWidth, newImgHeight);
+        // Use JPEG format in PDF for smaller size
+        pdf.addImage(imgData, 'JPEG', newXPosition, yPosition, newImgWidth, newImgHeight, undefined, 'MEDIUM');
       } else {
         // Content fits, use original calculations
-        pdf.addImage(imgData, 'PNG', xPosition, yPosition, imgWidth, imgHeight);
+        pdf.addImage(imgData, 'JPEG', xPosition, yPosition, imgWidth, imgHeight, undefined, 'MEDIUM');
       }
       
+      // Additional compression
+      pdf.compress = true;
+      
       pdf.save(`Salary_Slip_${formData.employeeName}_${formData.month}_${formData.year}.pdf`);
+    }).catch(error => {
+      console.error('Error generating PDF:', error);
+      // Remove class in case of error
+      element.classList.remove('for-pdf-export');
     });
   };
 
